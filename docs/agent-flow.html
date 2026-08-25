@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How the GCP Learning Studio Agent Works</title>
+  <style>
+    :root {
+      --paper: #f5f5f5;
+      --paper-2: #ffffff;
+      --ink: #2d3142;
+      --muted: #4f5d75;
+      --soft: #7a8399;
+      --rule: rgba(45, 49, 66, 0.14);
+      --accent: #eb6c36;
+      --accent-tint: #fae4d8;
+      --link: #2e5aa8;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: 'Geist', Arial, sans-serif;
+    }
+    main {
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 48px 56px 32px;
+    }
+    .eyebrow {
+      margin: 0 0 12px;
+      color: var(--muted);
+      font-family: 'Geist Mono', ui-monospace, monospace;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 0;
+      font-family: 'Instrument Serif', Georgia, serif;
+      font-size: 40px;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .subtitle {
+      max-width: 840px;
+      margin: 16px 0 28px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.45;
+    }
+    .diagram-frame {
+      overflow-x: auto;
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      background: var(--paper-2);
+    }
+    svg { display: block; width: 100%; min-width: 1280px; height: auto; }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 20px;
+      padding-top: 14px;
+      border-top: 1px solid var(--rule);
+      color: var(--soft);
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+    }
+    @media (max-width: 800px) {
+      main { padding: 32px 24px 24px; }
+      h1 { font-size: 32px; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="eyebrow">GCP LEARNING STUDIO · AGENT FLOW</p>
+    <h1>How the tutor turns a learner request into action</h1>
+    <p class="subtitle">The root ADK agent chooses a narrow tool path, grounds factual answers in the indexed Google Cloud corpus, and keeps quiz progress in the current session.</p>
+
+    <div class="diagram-frame">
+      <svg viewBox="0 0 1600 760" role="img" aria-labelledby="agent-flow-title agent-flow-desc">
+        <title id="agent-flow-title">How the GCP Learning Studio agent works</title>
+        <desc id="agent-flow-desc">Flowchart showing a learner request entering the ADK tutor, branching into documentation search, quiz, or product coverage paths, and returning a grounded response or session-aware learning result.</desc>
+        <defs>
+          <marker id="agent-flow-arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#4f5d75"/>
+          </marker>
+          <marker id="agent-flow-arrow-accent" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#eb6c36"/>
+          </marker>
+          <marker id="agent-flow-arrow-link" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#2e5aa8"/>
+          </marker>
+        </defs>
+
+        <rect width="1600" height="760" fill="#ffffff"/>
+
+        <!-- Connectors are painted first so node masks keep them legible. -->
+        <path d="M208 348 H280" fill="none" stroke="#4f5d75" stroke-width="2" marker-end="url(#agent-flow-arrow)"/>
+
+        <path d="M520 320 H620 Q628 320 628 312 V176 Q628 168 636 168 H720" fill="none" stroke="#eb6c36" stroke-width="2" marker-end="url(#agent-flow-arrow-accent)"/>
+        <path d="M520 348 H680 Q688 348 688 340 V348 H720" fill="none" stroke="#4f5d75" stroke-width="2" marker-end="url(#agent-flow-arrow)"/>
+        <path d="M520 376 H636 Q644 376 644 384 V520 Q644 528 652 528 H720" fill="none" stroke="#4f5d75" stroke-width="2" marker-end="url(#agent-flow-arrow)"/>
+
+        <path d="M944 168 H992" fill="none" stroke="#2e5aa8" stroke-width="2" marker-end="url(#agent-flow-arrow-link)"/>
+        <path d="M1216 168 H1264" fill="none" stroke="#2e5aa8" stroke-width="2" marker-end="url(#agent-flow-arrow-link)"/>
+        <path d="M944 348 H992" fill="none" stroke="#4f5d75" stroke-width="2" marker-end="url(#agent-flow-arrow)"/>
+        <path d="M1216 348 H1264" fill="none" stroke="#4f5d75" stroke-width="2" marker-end="url(#agent-flow-arrow)"/>
+
+        <!-- Connector labels sit in open canvas with opaque masks and visible gaps. -->
+        <rect x="220" y="326" width="44" height="16" rx="2" fill="#ffffff"/>
+        <text x="242" y="338" fill="#7a8399" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">ASK</text>
+        <rect x="564" y="292" width="68" height="16" rx="2" fill="#ffffff"/>
+        <text x="598" y="304" fill="#eb6c36" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">FACTUAL</text>
+        <rect x="564" y="332" width="60" height="16" rx="2" fill="#ffffff"/>
+        <text x="594" y="344" fill="#7a8399" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">QUIZ</text>
+        <rect x="556" y="388" width="76" height="16" rx="2" fill="#ffffff"/>
+        <text x="594" y="400" fill="#7a8399" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">COVERAGE</text>
+        <rect x="952" y="146" width="40" height="16" rx="2" fill="#ffffff"/>
+        <text x="972" y="158" fill="#2e5aa8" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">QUERY</text>
+        <rect x="1224" y="146" width="44" height="16" rx="2" fill="#ffffff"/>
+        <text x="1246" y="158" fill="#2e5aa8" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">SOURCES</text>
+        <rect x="952" y="326" width="40" height="16" rx="2" fill="#ffffff"/>
+        <text x="972" y="338" fill="#7a8399" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">SAVE</text>
+        <rect x="1224" y="326" width="40" height="16" rx="2" fill="#ffffff"/>
+        <text x="1244" y="338" fill="#7a8399" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">READ</text>
+
+        <!-- Learner input. -->
+        <g>
+          <rect x="48" y="300" width="160" height="96" rx="8" fill="#eef0f4" stroke="#7a8399" stroke-width="1"/>
+          <rect x="64" y="316" width="48" height="16" rx="2" fill="transparent" stroke="#7a8399" stroke-width="1"/>
+          <text x="88" y="328" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">INPUT</text>
+          <text x="128" y="362" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Learner</text>
+          <text x="128" y="384" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">question or answer</text>
+        </g>
+
+        <!-- Root agent: the focal element. -->
+        <g>
+          <rect x="280" y="300" width="240" height="96" rx="8" fill="#fae4d8" stroke="#eb6c36" stroke-width="2"/>
+          <rect x="296" y="316" width="48" height="16" rx="2" fill="transparent" stroke="#eb6c36" stroke-width="1"/>
+          <text x="320" y="328" fill="#eb6c36" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">AGENT</text>
+          <text x="400" y="362" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">GCP Learning Studio</text>
+          <text x="400" y="384" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">Gemini 2.5 Flash · ADK</text>
+        </g>
+
+        <!-- Documentation path. -->
+        <g>
+          <rect x="720" y="120" width="224" height="96" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="736" y="136" width="56" height="16" rx="2" fill="transparent" stroke="#2d3142" stroke-width="1"/>
+          <text x="764" y="148" fill="#2d3142" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">TOOL</text>
+          <text x="832" y="174" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Search docs</text>
+          <text x="832" y="196" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">limit 5 · optional product</text>
+        </g>
+        <g>
+          <rect x="992" y="120" width="224" height="96" rx="8" fill="#f0f2f6" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="1008" y="136" width="56" height="16" rx="2" fill="transparent" stroke="#4f5d75" stroke-width="1"/>
+          <text x="1036" y="148" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">INDEX</text>
+          <text x="1104" y="174" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Vertex AI Search</text>
+          <text x="1104" y="196" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">official GCP chunks</text>
+        </g>
+        <g>
+          <rect x="1264" y="120" width="224" height="96" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="1280" y="136" width="56" height="16" rx="2" fill="transparent" stroke="#2d3142" stroke-width="1"/>
+          <text x="1308" y="148" fill="#2d3142" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">OUTPUT</text>
+          <text x="1376" y="174" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Grounded answer</text>
+          <text x="1376" y="196" fill="#2e5aa8" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">Markdown citations</text>
+        </g>
+
+        <!-- Quiz path. -->
+        <g>
+          <rect x="720" y="300" width="224" height="96" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="736" y="316" width="56" height="16" rx="2" fill="transparent" stroke="#2d3142" stroke-width="1"/>
+          <text x="764" y="328" fill="#2d3142" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">TOOL</text>
+          <text x="832" y="354" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Quiz lifecycle</text>
+          <text x="832" y="376" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">start · grade · submit</text>
+        </g>
+        <g>
+          <rect x="992" y="300" width="224" height="96" rx="8" fill="#f0f2f6" stroke="#4f5d75" stroke-width="1"/>
+          <rect x="1008" y="316" width="56" height="16" rx="2" fill="transparent" stroke="#4f5d75" stroke-width="1"/>
+          <text x="1036" y="328" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">STATE</text>
+          <text x="1104" y="354" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">ADK session</text>
+          <text x="1104" y="376" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">active_quiz JSON</text>
+        </g>
+        <g>
+          <rect x="1264" y="300" width="224" height="96" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="1280" y="316" width="56" height="16" rx="2" fill="transparent" stroke="#2d3142" stroke-width="1"/>
+          <text x="1308" y="328" fill="#2d3142" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">OUTPUT</text>
+          <text x="1376" y="354" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Feedback + next Q</text>
+          <text x="1376" y="376" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">or quiz complete</text>
+        </g>
+
+        <!-- Coverage path. -->
+        <g>
+          <rect x="720" y="480" width="224" height="96" rx="8" fill="#ffffff" stroke="#2d3142" stroke-width="1"/>
+          <rect x="736" y="496" width="56" height="16" rx="2" fill="transparent" stroke="#2d3142" stroke-width="1"/>
+          <text x="764" y="508" fill="#2d3142" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle" letter-spacing=".08em">TOOL</text>
+          <text x="832" y="534" fill="#2d3142" font-size="16" font-weight="600" font-family="'Geist', sans-serif" text-anchor="middle">Product coverage list</text>
+          <text x="832" y="556" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" text-anchor="middle">list_supported_products → response</text>
+        </g>
+
+        <!-- Bottom legend strip. -->
+        <line x1="48" y1="636" x2="1488" y2="636" stroke="rgba(45,49,66,0.14)" stroke-width="1"/>
+        <text x="48" y="668" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace" letter-spacing=".14em">LEGEND</text>
+        <line x1="144" y1="664" x2="184" y2="664" stroke="#eb6c36" stroke-width="2"/>
+        <text x="196" y="668" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace">PRIMARY AGENT DECISION</text>
+        <line x1="416" y1="664" x2="456" y2="664" stroke="#2e5aa8" stroke-width="2"/>
+        <text x="468" y="668" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace">EXTERNAL SEARCH / CITATION</text>
+        <rect x="752" y="652" width="24" height="24" rx="4" fill="#f0f2f6" stroke="#4f5d75" stroke-width="1"/>
+        <text x="788" y="668" fill="#4f5d75" font-size="12" font-family="'Geist Mono', monospace">PERSISTED OR INDEXED STATE</text>
+      </svg>
+    </div>
+
+    <div class="footer">
+      <span>Source: adk_4_gcp_learning_studio/agent.py · tools.py</span>
+      <span>Static overview · 9 nodes · 8 transitions</span>
+    </div>
+  </main>
+</body>
+</html>

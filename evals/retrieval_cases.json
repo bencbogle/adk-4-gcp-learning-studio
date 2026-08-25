@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cloud-run-jobs",
+    "query": "How do Cloud Run jobs work?",
+    "product": "cloud-run",
+    "expected_source_urls": [
+      "https://docs.cloud.google.com/run/docs/create-jobs"
+    ]
+  },
+  {
+    "id": "artifact-registry-overview",
+    "query": "What is Artifact Registry?",
+    "product": "artifact-registry",
+    "expected_source_urls": [
+      "https://docs.cloud.google.com/artifact-registry/docs/overview"
+    ]
+  },
+  {
+    "id": "adk-runtime-deployment",
+    "query": "How do I develop and deploy an ADK agent?",
+    "product": "agent-platform",
+    "expected_source_urls": [
+      "https://docs.cloud.google.com/gemini-enterprise-agent-platform/build/runtime/quickstart-adk"
+    ]
+  },
+  {
+    "id": "vertex-ai-search",
+    "query": "What is Vertex AI Search?",
+    "product": "agent-search",
+    "expected_source_urls": [
+      "https://docs.cloud.google.com/vertex-ai/generative-ai/docs/learn/vertex-ai-search"
+    ]
+  },
+  {
+    "id": "pubsub-overview",
+    "query": "What is Pub/Sub?",
+    "product": "pubsub",
+    "expected_source_urls": [
+      "https://docs.cloud.google.com/pubsub/docs/overview"
+    ]
+  }
+]
