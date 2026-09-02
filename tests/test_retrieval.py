@@ -61,7 +61,10 @@ async def test_search_returns_citable_cloud_run_chunks(
 
     assert [chunk.chunk_id for chunk in results] == ["cloud-run-service-overview"]
     assert results[0].title == "What is Cloud Run?"
-    assert str(results[0].url) == "https://cloud.google.com/run/docs/overview/what-is-cloud-run"
+    assert (
+        str(results[0].url)
+        == "https://cloud.google.com/run/docs/overview/what-is-cloud-run"
+    )
     assert results[0].text
     assert results[0].indexed_at == datetime(2026, 8, 21, tzinfo=UTC)
 
